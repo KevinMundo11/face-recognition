@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Creación de la aplicación Flask
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 # Variables globales para almacenar los modelos cargados
 embedder = None  # Modelo FaceNet para embeddings faciales
