@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reconocimiento Facial en Tiempo Real</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👤</text></svg>">
     <style>
         :root {
@@ -41,6 +44,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+        
+        /* Nuevos estilos para el logo */
+        .logo-container {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .logo-fallback {
+            display: none;
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 0.5rem auto;
         }
         
         header {
@@ -342,6 +365,17 @@
 </head>
 <body>
     <div class="container">
+        <!-- Sección del logo añadida aquí -->
+        <div class="logo-container">
+            <img class="d-block mx-auto mb-2" 
+                 src="/static/logo_mcd.png" 
+                 alt="Reconocimiento Facial" 
+                 width="100" 
+                 height="100"
+                 onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+            <div id="logo-fallback" class="logo-fallback mx-auto mb-2">PYG</div>
+        </div>
+        
         <header>
             <h1>Reconocimiento Facial</h1>
             <p class="subtitle">Detección y reconocimiento facial en tiempo real</p>
@@ -901,129 +935,3 @@
                 // Actualizar la lista de caras rastreadas
                 trackedFaces = updatedFaces;
             }
-            
-            // Guardar los resultados para uso posterior
-            lastDetectionResults = newResults;
-        }
-        
-        // Renderizar los cuadros de detección facial con animación suave
-        function renderFaceBoxes() {
-            // Limpiar solo el canvas de caras, no el de video
-            faceCtx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
-            
-            // Si no hay caras rastreadas, salir
-            if (trackedFaces.length === 0) return;
-            
-            // Renderizar cada cara con animación suave
-            trackedFaces.forEach(face => {
-                // Interpolar suavemente hacia la posición objetivo
-                face.currentX = lerp(face.currentX, face.targetX, 0.3);
-                face.currentY = lerp(face.currentY, face.targetY, 0.3);
-                face.currentW = lerp(face.currentW, face.targetW, 0.3);
-                face.currentH = lerp(face.currentH, face.targetH, 0.3);
-                
-                // Dibujar el rectángulo con estilo mejorado - mismo color para todas las caras
-                faceCtx.strokeStyle = 'var(--face-box)';
-                faceCtx.lineWidth = 3;
-                faceCtx.beginPath();
-                faceCtx.roundRect(
-                    face.currentX, 
-                    face.currentY, 
-                    face.currentW, 
-                    face.currentH, 
-                    8
-                );
-                faceCtx.stroke();
-            });
-        }
-        
-        // Actualizar las etiquetas de nombres
-        function updateFaceLabels() {
-            // Limpiar las etiquetas existentes
-            faceLabelsContainer.innerHTML = '';
-            
-            // Crear una etiqueta para cada cara
-            trackedFaces.forEach(face => {
-                // Crear un elemento para la etiqueta
-                const label = document.createElement('div');
-                label.className = 'face-label';
-                label.textContent = face.nombre;
-                
-                // Posicionar la etiqueta sobre la cara
-                label.style.position = 'absolute';
-                label.style.left = `${face.currentX}px`;
-                label.style.top = `${face.currentY - 30}px`;
-                
-                // Estilo según si es conocido o desconocido - mismo color para todos
-                label.style.backgroundColor = 'var(--face-label)';
-                
-                // Añadir la etiqueta al contenedor
-                faceLabelsContainer.appendChild(label);
-            });
-        }
-        
-        // Función de interpolación lineal para animación suave
-        function lerp(start, end, factor) {
-            return start + (end - start) * factor;
-        }
-        
-        
-        function displayResults(resultados) {
-            peopleList.innerHTML = '';
-
-            // 1) Sin detección - no mostrar nada
-            if (resultados.length === 0) {
-                peopleList.innerHTML = ''; // Dejamos vacío el contenedor
-                return;
-            }
-
-            // 2) Nombre "unknown"
-            const nombre = resultados[0].nombre.toLowerCase();
-            if (nombre === 'unknown' || nombre === 'desconocido') {
-                // Usar el mismo estilo que el mensaje de bienvenida
-                const denyCard = document.createElement('div');
-                denyCard.className = 'person-card';
-                denyCard.innerHTML = `
-                    <div class="person-info">
-                    <div class="person-name">Acceso Denegado</div>
-                    </div>`;
-                peopleList.appendChild(denyCard);
-                return;
-            }
-
-            // 3) Bienvenida
-            const welcomeCard = document.createElement('div');
-            welcomeCard.className = 'person-card';
-            welcomeCard.innerHTML = `
-                <div class="person-info">
-                <div class="person-name">Bienvenido, ${resultados[0].nombre}</div>
-                </div>`;
-            peopleList.appendChild(welcomeCard);
-
-            // 4) Lista de reconocidos (si quieres evitar repetir al primero):
-            resultados.slice(1).forEach(resultado => {
-                const personDiv = document.createElement('div');
-                personDiv.className = 'person-card';
-                personDiv.innerHTML = `
-                <div class="person-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                </div>
-                <div class="person-info">
-                    <div class="person-name">${resultado.nombre}</div>
-                </div>`;
-                peopleList.appendChild(personDiv);
-            });
-        }
-
-        
-        // Inicializar la aplicación cuando se cargue la página
-        window.addEventListener('load', init);
-    </script>
-</body>
-</html>
-
