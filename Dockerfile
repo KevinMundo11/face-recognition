@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copiar archivos
-COPY . /app
+COPY . .
 COPY ./static /app/static
 COPY ./templates /app/templates
 
