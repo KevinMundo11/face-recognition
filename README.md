@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://mcd.unison.mx/wp-content/themes/awaken/img/logo_mcd.png" alt="MCD" width="140">
+  <img src="https://mcd.unison.mx/wp-content/themes/awaken/img/logo_mcd.png" alt="MCD" width="120">
 </p>
 
 # Reconocimiento Facial para aspirantes aceptados Maestría en Ciencia de Datos (2024)
