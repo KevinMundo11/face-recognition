@@ -7,8 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👤</text></svg>">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
     <style>
         :root {
             --primary: #4361ee;
@@ -378,7 +377,9 @@
         
         <header>
             <h1>Reconocimiento Facial</h1>
-            <p class="subtitle">Detección y reconocimiento facial en tiempo real</p>
+            <p class="subtitle">
+                Detecta rostros en tiempo real usando la cámara, compara las caras con los aspirantes aceptados a la Maestría en Ciencia de Datos y muestra si son reconocidos o desconocidos, utilizando MTCNN y FaceNet.
+            </p>
         </header>
         
         <div class="video-section">
@@ -418,7 +419,7 @@
         <div class="results-section">
             <div class="results-card">
                 <div class="results-header">
-                    <h2 class="results-title">Personas Detectadas</h2>
+                    <h2 class="results-title">Persona Detectada</h2>
                 </div>
                 <div id="peopleList" class="people-list">
                     <div class="waiting-detection">Esperando detección...</div>
@@ -462,7 +463,6 @@
             faceCanvas.height = containerHeight;
         }
         
-        // Añade esto después de la declaración de variables globales
         video.addEventListener('error', (e) => {
             console.error('Error en el elemento de video:', e);
             status.innerHTML = `
@@ -720,7 +720,7 @@
                     const data = await response.json();
                     
                     if (data.models_loaded) {
-                        status.innerHTML = '✅ Modelos cargados';
+                        status.innerHTML = 'Modelo cargado';
                         processingInterval = setInterval(processFrame, 1000); // 1 petición/segundo
                         break;
                     } else {
@@ -733,7 +733,6 @@
             }
         }
 
-        // Add this new function to check model status
         async function checkModelsStatus() {
             try {
                 const response = await fetch('/status');
@@ -759,7 +758,6 @@
                         peopleList.innerHTML = '<div class="waiting-detection">Esperando detección...</div>';
                     }
                 } else {
-                    // Models still loading, show status and check again in 3 seconds
                     status.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
                             <circle cx="12" cy="12" r="10"/>
@@ -1044,7 +1042,7 @@
                             </svg>
                         </div>
                         <div class="person-info">
-                            <div class="person-name">Bienvenido, ${resultado.nombre}</div>
+                            <div class="person-name">Acceso correcto, ${resultado.nombre}</div>
                         </div>`;
                 }
 
