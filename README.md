@@ -10,14 +10,15 @@ Usa los modelos **MTCNN** para detección y **FaceNet** para generación de embe
 
 ## Estructura del proyecto
 ```
-├── app.py               → Aplicación principal Flask
-├── templates/           → Plantillas HTML (frontend)
-├── static/              → Archivos estáticos (imágenes)
-├── embeddings.pkl       → Archivo pickle con embeddings preprocesados
-├── requirements.txt     → Lista de dependencias Python
-├── Dockerfile           → Archivo para contenerización con Docker
-├── LICENSE              → Licencia del proyecto
-└── README.md            → Este documento
+├── app.py                      → Aplicación principal Flask
+├── templates/                  → Plantillas HTML (frontend)
+├── static/                     → Archivos estáticos (logos)
+├── GenerarEmbeddings-DataBase/ → Archivos para generar embeddings.pkl
+├── embeddings.pkl              → Archivo pickle con embeddings preprocesados
+├── requirements.txt            → Lista de dependencias Python
+├── Dockerfile                  → Archivo para contenerización con Docker
+├── LICENSE                     → Licencia del proyecto
+└── README.md                   → Este documento
 ```
 
 ## ¿Qué hace este proyecto?
