@@ -698,7 +698,7 @@
                     const data = await response.json();
                     
                     if (data.models_loaded) {
-                        status.innerHTML = 'Modelos cargados';
+                        status.innerHTML = '✅ Modelos cargados';
                         processingInterval = setInterval(processFrame, 1000); // 1 petición/segundo
                         break;
                     } else {
