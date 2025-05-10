@@ -30,7 +30,7 @@ Después del procesamiento, se generará:
 
 Instala las dependencias usando:
 ```
-pip install -r requirements.txt
+pip install -r requirements-embeddings.txt
 ```
 
 ## Cómo correr el script
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 
 2. Corre el script principal:
 ```
-python script.py
+python caras.py
 ```
 Esto ejecutará:
 - Aplicar aumentación de datos: se guarda en data_procesado/
