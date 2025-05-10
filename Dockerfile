@@ -12,6 +12,8 @@ WORKDIR /app
 
 # Copiar archivos
 COPY . /app
+COPY ./static /app/static
+COPY ./templates /app/templates
 
 # Instalar dependencias de Python
 RUN pip install --upgrade pip
