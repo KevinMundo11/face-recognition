@@ -935,3 +935,126 @@
                 // Actualizar la lista de caras rastreadas
                 trackedFaces = updatedFaces;
             }
+            // Guardar los resultados para uso posterior
+            lastDetectionResults = newResults;
+        }
+        
+        // Renderizar los cuadros de detección facial con animación suave
+        function renderFaceBoxes() {
+            // Limpiar solo el canvas de caras, no el de video
+            faceCtx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
+            
+            // Si no hay caras rastreadas, salir
+            if (trackedFaces.length === 0) return;
+            
+            // Renderizar cada cara con animación suave
+            trackedFaces.forEach(face => {
+                face.currentX = lerp(face.currentX, face.targetX, 0.3);
+                face.currentY = lerp(face.currentY, face.targetY, 0.3);
+                face.currentW = lerp(face.currentW, face.targetW, 0.3);
+                face.currentH = lerp(face.currentH, face.targetH, 0.3);
+
+                // Detectar si el rostro es desconocido
+                const esDesconocido = face.nombre.toLowerCase() === 'unknown' || face.nombre.toLowerCase() === 'desconocido';
+
+                // Color de borde según el caso
+                faceCtx.strokeStyle = esDesconocido ? 'var(--danger)' : 'var(--face-box)';
+                faceCtx.lineWidth = 3;
+                faceCtx.beginPath();
+                faceCtx.roundRect(
+                    face.currentX, 
+                    face.currentY, 
+                    face.currentW, 
+                    face.currentH, 
+                    8
+                );
+                faceCtx.stroke();
+            });
+        }
+        
+        // Actualizar las etiquetas de nombres
+        function updateFaceLabels() {
+            // Limpiar las etiquetas existentes
+            faceLabelsContainer.innerHTML = '';
+            
+            // Crear una etiqueta para cada cara
+            trackedFaces.forEach(face => {
+                const label = document.createElement('div');
+                label.className = 'face-label';
+
+                // Mostrar "Desconocido" si el nombre lo indica
+                const esDesconocido = face.nombre.toLowerCase() === 'unknown' || face.nombre.toLowerCase() === 'desconocido';
+                label.textContent = esDesconocido ? 'Desconocido' : face.nombre;
+
+                // Posicionar la etiqueta sobre la cara
+                label.style.position = 'absolute';
+                label.style.left = `${face.currentX}px`;
+                label.style.top = `${face.currentY - 30}px`;
+
+                // Cambiar color de fondo según si es conocido o no
+                label.style.backgroundColor = esDesconocido
+                    ? 'var(--danger)'
+                    : 'var(--face-label)';
+
+                faceLabelsContainer.appendChild(label);
+            });
+        }
+
+        
+        // Función de interpolación lineal para animación suave
+        function lerp(start, end, factor) {
+            return start + (end - start) * factor;
+        }
+        
+        
+        function displayResults(resultados) {
+            console.log('Resultados recibidos:', resultados);
+            peopleList.innerHTML = '';
+
+            if (resultados.length === 0) return;
+
+            resultados.forEach(resultado => {
+                const nombre = resultado.nombre.toLowerCase();
+                const esDesconocido = nombre === 'unknown' || nombre === 'desconocido';
+
+                const card = document.createElement('div');
+                card.className = 'person-card';
+
+                if (esDesconocido) {
+                    card.innerHTML = `
+                        <div class="person-icon denied">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6L6 18"/>
+                                <path d="M6 6l12 12"/>
+                            </svg>
+                        </div>
+                        <div class="person-info">
+                            <div class="person-name denied">Acceso Denegado</div>
+                        </div>`;
+                } else {
+                    card.innerHTML = `
+                        <div class="person-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="person-info">
+                            <div class="person-name">Bienvenido, ${resultado.nombre}</div>
+                        </div>`;
+                }
+
+                peopleList.appendChild(card);
+            });
+        }
+
+        
+        // Inicializar la aplicación cuando se cargue la página
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
