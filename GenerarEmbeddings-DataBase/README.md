@@ -4,7 +4,6 @@ Este proyecto realiza dos tareas principales:
 1. Aplica **data augmentation** sobre un conjunto de imágenes organizadas por carpetas (una carpeta por persona).
 2. Genera **embeddings faciales** usando FaceNet para todas las imágenes aumentadas y guarda los resultados en un archivo `.pkl`.
 
----
 
 ## Estructura esperada de carpetas
 ```
@@ -25,7 +24,7 @@ Después del procesamiento, se generará:
 ├── requirements-embeddings.txt     → Lista de dependencias Python
 └── README.md                       → Este documento
 ```
-s
+
 
 ## Requisitos
 
